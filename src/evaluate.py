@@ -1,19 +1,26 @@
 # src/evaluate.py
 
+import os
 import joblib
 import torch
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from torch.utils.data import DataLoader
-from config import RF_MODEL_FILE, XGB_MODEL_FILE, ANN_MODEL_FILE, BATCH_SIZE
+from config import RF_MODEL_FILE, XGB_MODEL_FILE, ANN_MODEL_FILE, BATCH_SIZE, MODEL_PATH
 from src.data import get_merged_data
+from src.load_colab_split import load_fixed_colab_split
 from src.preprocessing import preprocess_and_split
-from src.ann_train import CreditANN, CreditDataset, device
+from src.ann_model import CreditANN
+from src.ann_train import CreditDataset, device
+
+# ✅ Load top-20 feature indices
+TOP_20_INDICES_PATH = os.path.join(MODEL_PATH, "top20_feature_indices.pkl")
+top_20_indices = joblib.load(TOP_20_INDICES_PATH)
 
 def evaluate_model(name, model, X_test, y_test, is_ann=False):
     if is_ann:
-        # Convert to dense tensors
         X_test = X_test.toarray() if hasattr(X_test, "toarray") else X_test
+        
         dataset = CreditDataset(X_test, y_test)
         loader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=False)
 
@@ -36,6 +43,9 @@ def evaluate_model(name, model, X_test, y_test, is_ann=False):
         all_proba = [p[0] for p in all_proba]
 
     else:
+        X_test = X_test.toarray() if hasattr(X_test, "toarray") else X_test
+       
+
         y_pred = model.predict(X_test)
         y_proba = model.predict_proba(X_test)[:, 1]
         all_preds = y_pred
@@ -53,15 +63,15 @@ def evaluate_model(name, model, X_test, y_test, is_ann=False):
     return acc, f1, auc
 
 def main():
-    df = get_merged_data()
-    X_train, X_test, y_train, y_test, _ = preprocess_and_split(df)
+
+    X_train, X_test, y_train, y_test = load_fixed_colab_split()
 
     # Load models
     rf = joblib.load(RF_MODEL_FILE)
     xgb = joblib.load(XGB_MODEL_FILE)
 
-    input_dim = X_test.shape[1] if not hasattr(X_test, "toarray") else X_test.toarray().shape[1]
-    ann = CreditANN(input_dim).to(device)
+    input_dim = X_test.toarray().shape[1] if hasattr(X_test, "toarray") else X_test.shape[1]
+    ann = CreditANN(len(top_20_indices)).to(device)
     ann.load_state_dict(torch.load(ANN_MODEL_FILE, map_location=device))
 
     print("\n🔍 Comparing Trained Models:")

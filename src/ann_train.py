@@ -12,7 +12,9 @@ import mlflow
 import mlflow.pytorch
 
 from src.data import get_merged_data
+from src.load_colab_split import load_fixed_colab_split
 from src.preprocessing import preprocess_and_split_clean as preprocess_and_split
+from src.ann_model import CreditANN
 from config import (
     RANDOM_STATE, MODEL_PATH, ANN_MODEL_FILE, BATCH_SIZE,
     ANN_HIDDEN1, ANN_HIDDEN2, ANN_DROPOUT, ANN_LR, ANN_EPOCHS
@@ -20,6 +22,10 @@ from config import (
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 os.makedirs(MODEL_PATH, exist_ok=True)
+
+# ✅ Load top-20 feature indices
+TOP_20_INDICES_PATH = os.path.join(MODEL_PATH, "top20_feature_indices.pkl")
+top_20_indices = joblib.load(TOP_20_INDICES_PATH)
 
 class CreditDataset(Dataset):
     def __init__(self, X, y):
@@ -32,36 +38,21 @@ class CreditDataset(Dataset):
     def __getitem__(self, idx):
         return self.X[idx], self.y[idx]
 
-class CreditANN(nn.Module):
-    def __init__(self, input_dim):
-        super(CreditANN, self).__init__()
-        self.model = nn.Sequential(
-            nn.Linear(input_dim, ANN_HIDDEN1),
-            nn.BatchNorm1d(ANN_HIDDEN1),
-            nn.ReLU(),
-            nn.Dropout(ANN_DROPOUT),
-
-            nn.Linear(ANN_HIDDEN1, ANN_HIDDEN2),
-            nn.BatchNorm1d(ANN_HIDDEN2),
-            nn.ReLU(),
-            nn.Dropout(ANN_DROPOUT),
-
-            nn.Linear(ANN_HIDDEN2, 1)
-        )
-
-    def forward(self, x):
-        return self.model(x)
-
 def train_ann():
     mlflow.set_experiment("credit_risk_classification")
     with mlflow.start_run(run_name="ANN"):
 
-        df = get_merged_data()
-        X_train, X_test, y_train, y_test, _ = preprocess_and_split(df)
 
+        X_train, X_test, y_train, y_test = load_fixed_colab_split()
+
+        # ✅ Convert sparse to dense
         X_train = X_train.toarray() if hasattr(X_train, "toarray") else X_train
         X_test = X_test.toarray() if hasattr(X_test, "toarray") else X_test
 
+    
+       
+
+        # ✅ Create loaders
         train_loader = DataLoader(CreditDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
         test_loader = DataLoader(CreditDataset(X_test, y_test), batch_size=BATCH_SIZE, shuffle=False)
 
@@ -122,7 +113,7 @@ def train_ann():
         print(f"F1 Score:   {f1:.4f}")
         print(f"ROC AUC:    {auc:.4f}")
 
-        # --- Log to MLflow
+        # --- MLflow logging
         mlflow.log_param("model", "ANN")
         mlflow.log_param("hidden1", ANN_HIDDEN1)
         mlflow.log_param("hidden2", ANN_HIDDEN2)

@@ -10,6 +10,7 @@ from sklearn.metrics import f1_score, accuracy_score, roc_auc_score
 import xgboost as xgb
 
 from src.data import get_merged_data
+from src.load_colab_split import load_fixed_colab_split
 from src.preprocessing import preprocess_and_split_clean as preprocess_and_split
 from config import (
     CV_SPLITS, RANDOM_STATE, MODEL_PATH,
@@ -18,6 +19,10 @@ from config import (
 )
 
 os.makedirs(MODEL_PATH, exist_ok=True)
+
+# ✅ Load Top 20 Feature Indices
+TOP_20_INDICES_PATH = os.path.join(MODEL_PATH, "top20_feature_indices.pkl")
+top_20_indices = joblib.load(TOP_20_INDICES_PATH)
 
 def train_rf(X_train, y_train):
     skf = StratifiedKFold(n_splits=CV_SPLITS, shuffle=True, random_state=RANDOM_STATE)
@@ -80,8 +85,14 @@ def evaluate_model(model, X_test, y_test, label="Model"):
 def main():
     mlflow.set_experiment("credit_risk_classification")
 
-    df = get_merged_data()
-    X_train, X_test, y_train, y_test, _ = preprocess_and_split(df, save_path=PREPROCESSOR_FILE)
+  
+    X_train, X_test, y_train, y_test= load_fixed_colab_split()
+
+    # ✅ Convert to dense if sparse
+    X_train = X_train.toarray() if hasattr(X_train, "toarray") else X_train
+    X_test = X_test.toarray() if hasattr(X_test, "toarray") else X_test
+
+  
 
     # --- Random Forest Logging --- #
     with mlflow.start_run(run_name="RandomForest"):
