@@ -1,0 +1,22 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore model files and large binaries
+*.pkl
+*.pth
+*.joblib
+
+# Ignore MLflow artifacts
+mlruns/
+
+# Ignore raw and intermediate data
+data/
+
+# Optional: ignore zipped datasets
+*.zip
+*.tar.gz

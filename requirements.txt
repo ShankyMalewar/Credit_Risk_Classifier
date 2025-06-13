@@ -1,0 +1,16 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+jupyterlab
+ray
+
+# Added for model training
+xgboost
+torch
+torchvision
+
+# Added for model saving and progress monitoring
+joblib
+tqdm
+
