@@ -8,7 +8,9 @@ from torch.utils.data import DataLoader, TensorDataset
 from src.config import RF_MODEL_FILE, XGB_MODEL_FILE, ANN_MODEL_FILE, BATCH_SIZE, MODEL_PATH
 from src.load_colab_split import load_fixed_colab_split
 from src.ann_model import CreditANN
+from src.logger import get_logger
 
+logger = get_logger(__name__)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 TOP_20_INDICES_PATH = os.path.join(MODEL_PATH, "top20_feature_indices.pkl")
@@ -54,10 +56,10 @@ def evaluate_model(name, model, X_test, y_test, is_ann=False):
     f1 = f1_score(all_labels, all_preds)
     auc = roc_auc_score(all_labels, all_proba)
 
-    print(f"\n{name} Evaluation:")
-    print(f"Accuracy:   {acc:.4f}")
-    print(f"F1 Score:   {f1:.4f}")
-    print(f"ROC AUC:    {auc:.4f}")
+    logger.info(f"{name} Evaluation:")
+    logger.info(f"Accuracy:   {acc:.4f}")
+    logger.info(f"F1 Score:   {f1:.4f}")
+    logger.info(f"ROC AUC:    {auc:.4f}")
     return acc, f1, auc
 
 def evaluate_ensemble(X_test, y_test):
@@ -80,10 +82,10 @@ def evaluate_ensemble(X_test, y_test):
     f1 = f1_score(y_test, final_pred)
     auc = roc_auc_score(y_test, final_proba)
 
-    print("\nEnsemble Evaluation:")
-    print(f"Accuracy:   {acc:.4f}")
-    print(f"F1 Score:   {f1:.4f}")
-    print(f"ROC AUC:    {auc:.4f}")
+    logger.info("Ensemble Evaluation:")
+    logger.info(f"Accuracy:   {acc:.4f}")
+    logger.info(f"F1 Score:   {f1:.4f}")
+    logger.info(f"ROC AUC:    {auc:.4f}")
     return acc, f1, auc
 
 def main():
