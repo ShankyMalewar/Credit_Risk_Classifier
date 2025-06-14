@@ -3,7 +3,7 @@
 import os
 import pandas as pd
 import numpy as np
-from config import DATA_PATH
+from src.config import DATA_PATH
 
 def downcast_df(df):
     for col in df.select_dtypes(include='float64').columns:

@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
-from config import TEST_SIZE, RANDOM_STATE, DOWNSAMPLE_RATIO
+from src.config import TEST_SIZE, RANDOM_STATE, DOWNSAMPLE_RATIO
 import joblib
 import os
 
