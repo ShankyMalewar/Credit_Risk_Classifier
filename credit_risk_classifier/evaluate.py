@@ -5,10 +5,10 @@ import torch
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
 from torch.utils.data import DataLoader, TensorDataset
-from src.config import RF_MODEL_FILE, XGB_MODEL_FILE, ANN_MODEL_FILE, BATCH_SIZE, MODEL_PATH
-from src.load_colab_split import load_fixed_colab_split
-from src.ann_model import CreditANN
-from src.logger import get_logger
+from credit_risk_classifier.config import RF_MODEL_FILE, XGB_MODEL_FILE, ANN_MODEL_FILE, BATCH_SIZE, MODEL_PATH
+from credit_risk_classifier.load_colab_split import load_fixed_colab_split
+from credit_risk_classifier.ann_model import CreditANN
+from credit_risk_classifier.logger import get_logger
 
 logger = get_logger(__name__)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
