@@ -151,6 +151,12 @@ def main():
             logger.info("Random Forest training completed.")
             evaluate_model(rf_model, X_test, y_test, label="Random Forest")
             joblib.dump(rf_model, RF_MODEL_FILE)
+            mlflow.sklearn.log_model(
+                sk_model=rf_model,
+                artifact_path="rf_model",
+                registered_model_name="CreditRiskRF"
+            )
+            logger.info("✅ Random Forest model registered.")
             logger.info(f"Random Forest model saved to {RF_MODEL_FILE}")
             log_artifact()
 
@@ -161,6 +167,13 @@ def main():
             logger.info("XGBoost training completed.")
             evaluate_model(xgb_model, X_test, y_test, label="XGBoost")
             joblib.dump(xgb_model, XGB_MODEL_FILE)
+            mlflow.xgboost.log_model(
+                xgb_model=xgb_model,
+                artifact_path="xgb_model",
+                registered_model_name="CreditRiskXGB"
+            )
+            logger.info("✅ XGBoost model registered.")
+
             logger.info(f"XGBoost model saved to {XGB_MODEL_FILE}")
             log_artifact()
 
@@ -171,11 +184,23 @@ def main():
             logger.info("ANN training completed.")
             evaluate_ann(ann_model, X_test, y_test)
             logger.info(f"ANN model saved to {ANN_MODEL_FILE}")
+            mlflow.pytorch.log_model(
+                pytorch_model=ann_model,
+                artifact_path="ann_model",
+                registered_model_name="CreditRiskANN"
+            )
+            logger.info("✅ ANN model registered.")
+
             log_artifact()
 
     if args.model == "ensemble":
         logger.info("Evaluating ensemble...")
         with mlflow.start_run(run_name="Ensemble"):
+            with open("ensemble_info.txt", "w") as f:
+                f.write("Ensemble = 0.3 * RF + 0.5 * XGB + 0.2 * ANN\n")
+            mlflow.log_artifact("ensemble_info.txt")
+            logger.info("✅ Ensemble logic saved as artifact.")
+
             evaluate_ensemble(X_test, y_test)
             log_artifact()
 

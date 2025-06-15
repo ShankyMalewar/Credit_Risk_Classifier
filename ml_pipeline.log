@@ -73,3 +73,53 @@
 [2025-06-15 02:10:52] [INFO] __main__: ROC AUC:    0.7361
 [2025-06-15 02:10:52] [INFO] __main__: ANN model saved to models/ann_model.pth
 [2025-06-15 02:10:52] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:05:01] [INFO] __main__: Logger initialized. Starting training pipeline...
+[2025-06-15 20:05:01] [INFO] __main__: Starting Random Forest training...
+[2025-06-15 20:05:31] [INFO] __main__: Random Forest training completed.
+[2025-06-15 20:05:31] [INFO] __main__: Random Forest Evaluation:
+[2025-06-15 20:05:31] [INFO] __main__: Accuracy:   0.6957
+[2025-06-15 20:05:31] [INFO] __main__: F1 Score:   0.5708
+[2025-06-15 20:05:31] [INFO] __main__: ROC AUC:    0.7406
+[2025-06-15 20:05:32] [INFO] __main__: Random Forest model saved to models/rf_model.pkl
+[2025-06-15 20:05:32] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:05:32] [INFO] __main__: Starting XGBoost training...
+[2025-06-15 20:05:33] [INFO] __main__: XGBoost training completed.
+[2025-06-15 20:05:33] [INFO] __main__: XGBoost Evaluation:
+[2025-06-15 20:05:33] [INFO] __main__: Accuracy:   0.6946
+[2025-06-15 20:05:33] [INFO] __main__: F1 Score:   0.5960
+[2025-06-15 20:05:33] [INFO] __main__: ROC AUC:    0.7559
+[2025-06-15 20:05:33] [INFO] __main__: XGBoost model saved to models/xgb_model.pkl
+[2025-06-15 20:05:33] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:05:33] [INFO] __main__: Starting ANN training...
+[2025-06-15 20:06:06] [INFO] __main__: ANN training completed.
+[2025-06-15 20:06:06] [INFO] __main__: ANN Evaluation:
+[2025-06-15 20:06:06] [INFO] __main__: Accuracy:   0.6763
+[2025-06-15 20:06:06] [INFO] __main__: F1 Score:   0.5830
+[2025-06-15 20:06:06] [INFO] __main__: ROC AUC:    0.7361
+[2025-06-15 20:06:06] [INFO] __main__: ANN model saved to models/ann_model.pth
+[2025-06-15 20:06:06] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:28:19] [INFO] __main__: Logger initialized. Starting training pipeline...
+[2025-06-15 20:28:19] [INFO] __main__: Starting Random Forest training...
+[2025-06-15 20:28:49] [INFO] __main__: Random Forest training completed.
+[2025-06-15 20:28:49] [INFO] __main__: Random Forest Evaluation:
+[2025-06-15 20:28:49] [INFO] __main__: Accuracy:   0.6957
+[2025-06-15 20:28:49] [INFO] __main__: F1 Score:   0.5708
+[2025-06-15 20:28:49] [INFO] __main__: ROC AUC:    0.7406
+[2025-06-15 20:28:59] [INFO] __main__: Random Forest model saved to models/rf_model.pkl
+[2025-06-15 20:28:59] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:28:59] [INFO] __main__: Starting XGBoost training...
+[2025-06-15 20:29:01] [INFO] __main__: XGBoost training completed.
+[2025-06-15 20:29:01] [INFO] __main__: XGBoost Evaluation:
+[2025-06-15 20:29:01] [INFO] __main__: Accuracy:   0.6946
+[2025-06-15 20:29:01] [INFO] __main__: F1 Score:   0.5960
+[2025-06-15 20:29:01] [INFO] __main__: ROC AUC:    0.7559
+[2025-06-15 20:29:07] [INFO] __main__: XGBoost model saved to models/xgb_model.pkl
+[2025-06-15 20:29:07] [INFO] __main__: Logged ml_pipeline.log as artifact.
+[2025-06-15 20:29:07] [INFO] __main__: Starting ANN training...
+[2025-06-15 20:29:50] [INFO] __main__: ANN training completed.
+[2025-06-15 20:29:50] [INFO] __main__: ANN Evaluation:
+[2025-06-15 20:29:50] [INFO] __main__: Accuracy:   0.6763
+[2025-06-15 20:29:50] [INFO] __main__: F1 Score:   0.5830
+[2025-06-15 20:29:50] [INFO] __main__: ROC AUC:    0.7361
+[2025-06-15 20:29:50] [INFO] __main__: ANN model saved to models/ann_model.pth
+[2025-06-15 20:29:58] [INFO] __main__: Logged ml_pipeline.log as artifact.
