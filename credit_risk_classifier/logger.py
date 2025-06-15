@@ -5,7 +5,7 @@ def get_logger(name=__name__, log_file="ml_pipeline.log", level=logging.INFO):
     logger = logging.getLogger(name)
     logger.setLevel(level)
 
-    # Ensure no old handlers
+ 
     logger.handlers = []
 
     formatter = logging.Formatter(

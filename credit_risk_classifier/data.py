@@ -1,5 +1,3 @@
-# src/data.py
-
 import os
 import pandas as pd
 import numpy as np
@@ -99,7 +97,7 @@ def process_pos_cash():
 def get_merged_data():
     df = load_application_data()
 
-    # Merge all sources
+    #Merged all sources
     df = df.merge(process_bureau(), on='SK_ID_CURR', how='left')
     df = df.merge(process_previous(), on='SK_ID_CURR', how='left')
     df = df.merge(process_installments(), on='SK_ID_CURR', how='left')

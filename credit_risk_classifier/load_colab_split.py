@@ -1,5 +1,3 @@
-# src/load_colab_split.py
-
 import joblib
 import os
 

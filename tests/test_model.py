@@ -13,7 +13,7 @@ def test_xgb_model_loads():
     assert xgb is not None
 
 def test_ann_model_loads_and_predicts():
-    # Assuming 20 features — adjust if needed
+    
     input_dim = 20  
     model = CreditANN(input_dim)
     model.load_state_dict(torch.load(ANN_MODEL_FILE, map_location="cpu"))

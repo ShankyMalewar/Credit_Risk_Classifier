@@ -10,7 +10,7 @@ from credit_risk_classifier.config import (
 
 app = FastAPI(title="Credit Risk Classifier API")
 
-# Load models
+#Loading models
 try:
     xgb_model = joblib.load(XGB_MODEL_FILE)
     rf_model = joblib.load(RF_MODEL_FILE)

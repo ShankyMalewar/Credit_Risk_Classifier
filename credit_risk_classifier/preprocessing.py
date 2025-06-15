@@ -8,7 +8,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
-from src.config import TEST_SIZE, RANDOM_STATE, DOWNSAMPLE_RATIO
+from credit_risk_classifier.config import TEST_SIZE, RANDOM_STATE, DOWNSAMPLE_RATIO
 import joblib
 import os
 
@@ -35,7 +35,7 @@ def build_preprocessor(X):
     categorical_cols = X.select_dtypes(include="object").columns.tolist()
     numerical_cols = X.select_dtypes(include=["int64", "float64"]).columns.tolist()
 
-    # Convert all categorical to strings (safety)
+    # Converting all categorical to strings (safety)
     for col in categorical_cols:
         X[col] = X[col].astype(str)
 
@@ -69,7 +69,7 @@ def preprocess_and_split_clean(df, save_path="models/preprocessor.pkl"):
     X_train = preprocessor.fit_transform(X_train_raw)
     X_test = preprocessor.transform(X_test_raw)
 
-    # Save fitted preprocessor
+    #saving
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     joblib.dump(preprocessor, save_path)
 

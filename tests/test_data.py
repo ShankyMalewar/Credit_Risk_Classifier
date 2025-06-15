@@ -8,7 +8,7 @@ def test_data_loads():
 
 def test_data_columns_expected():
     df = get_merged_data()
-    expected_cols = ["TARGET"]  # add more columns if you want stricter check
+    expected_cols = ["TARGET"]  
     for col in expected_cols:
         assert col in df.columns
 
