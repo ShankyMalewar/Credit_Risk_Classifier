@@ -35,7 +35,6 @@ def build_preprocessor(X):
     categorical_cols = X.select_dtypes(include="object").columns.tolist()
     numerical_cols = X.select_dtypes(include=["int64", "float64"]).columns.tolist()
 
-    # Converting all categorical to strings (safety)
     for col in categorical_cols:
         X[col] = X[col].astype(str)
 
@@ -69,8 +68,36 @@ def preprocess_and_split_clean(df, save_path="models/preprocessor.pkl"):
     X_train = preprocessor.fit_transform(X_train_raw)
     X_test = preprocessor.transform(X_test_raw)
 
-    #saving
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     joblib.dump(preprocessor, save_path)
 
     return X_train, X_test, y_train, y_test, preprocessor
+
+# 🚀 NEW FUNCTION FOR FASTAPI USER INPUT
+def preprocess_user_input(request):
+    """
+    Converts user input dict into model's expected 20 feature values (as list)
+    """
+    features = [
+        (request.loan_amount + request.max_past_loan) / 2,       # AMT_CREDIT_SUM_mean
+        request.loan_amount + request.max_past_loan,            # AMT_CREDIT_SUM_sum
+        request.loan_amount * 0.1,                              # INST_AMT_PAYMENT_MAX
+        request.loan_amount * 0.05,                             # INST_AMT_PAYMENT_MEAN
+        request.loan_amount * 0.6,                              # AMT_CREDIT_SUM_DEBT_max
+        -12 * request.loan_term_years / 2,                      # POS_MONTHS_BALANCE_MEAN
+        0.5,                                                    # INST_PAYMENT_RATIO_MIN
+        request.past_loans,                                      # SK_ID_BUREAU_sum
+        request.loan_amount * 0.1,                              # INST_AMT_INSTALMENT_MAX
+        request.loan_amount * request.loan_term_years * 12,     # INST_AMT_INSTALMENT_SUM
+        request.loan_amount * 0.5,                              # AMT_CREDIT_SUM_DEBT_mean
+        -12 * request.loan_term_years,                          # POS_MONTHS_BALANCE_MIN
+        request.loan_amount * 0.5,                              # AMT_CREDIT_SUM_DEBT_sum
+        1.0 if request.higher_education else 0.0,               # NAME_EDUCATION_TYPE_Higher education
+        request.loan_amount * request.loan_term_years * 12 * 0.05, # INST_AMT_PAYMENT_SUM
+        -12 * request.loan_term_years,                          # POS_MONTHS_BALANCE_SUM
+        -365 * (request.years_since_first_loan + request.years_since_last_loan), # DAYS_CREDIT_sum
+        -365 * request.years_since_first_loan,                  # DAYS_CREDIT_min
+        -365 * request.years_since_last_loan,                   # DAYS_CREDIT_max
+        -365 * (request.years_since_first_loan + request.years_since_last_loan) / 2 # DAYS_CREDIT_mean
+    ]
+    return features
